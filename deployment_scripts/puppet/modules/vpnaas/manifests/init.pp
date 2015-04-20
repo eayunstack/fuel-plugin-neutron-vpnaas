@@ -3,6 +3,7 @@ class vpnaas (
   $vpnaas_vpn_device_driver           = 'neutron.services.vpn.device_drivers.ipsec.OpenSwanDriver',
   $vpnaas_ipsec_status_check_interval = '30',
   $vpnaas_plugin                      = 'neutron.services.vpn.plugin.VPNDriverPlugin',
+  $cluster_mode                       = undef,
 ) {
 
   include vpnaas::params
@@ -12,8 +13,12 @@ class vpnaas (
   }
 
   service { $vpnaas::params::l3_agent_service:
-    ensure => running,
-    enable => true,
+    ensure   => running,
+    enable   => true,
+    provider => $cluster_mode ? {
+      'ha_compact' => 'pacemaker',
+      default      => undef
+    },
   }
 
   file { 'replace-neutron-l3-agent':
