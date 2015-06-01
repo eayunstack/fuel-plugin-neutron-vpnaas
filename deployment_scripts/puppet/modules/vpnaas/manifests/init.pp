@@ -65,7 +65,7 @@ class vpnaas (
 
   exec { 'enable_vpnaas_dashboard':
     command => "/bin/echo \"OPENSTACK_NEUTRON_NETWORK['enable_vpn'] = True\" >> $vpnaas::params::dashboard_settings",
-    unless  => "/bin/egrep \"^OPENSTACK_NEUTRON_NETWORK['enable_vpn'] = True\" $vpnaas:params::dashboard_settings",
+    unless  => "/bin/egrep \"^OPENSTACK_NEUTRON_NETWORK['enable_vpn'] = True\" $vpnaas::params::dashboard_settings",
   }
 
   Exec['enable_vpnaas_dashboard'] ~> Service[$vpnaas::params::dashboard_service]
